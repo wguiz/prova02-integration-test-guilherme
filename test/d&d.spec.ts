@@ -48,4 +48,26 @@ describe('D&D Combat API - Battle Goblin', () => {
       });
   });
 
+  it('should battle a Goblin with TestCharacter', async () => {
+    const character = {
+      name: 'TestCharacter',
+      strength: 15,
+      dexterity: 14,
+      hitPoints: 30,
+      armorClass: 15
+    };
+
+    await pactum.spec()
+      .post(`${apiUrl}/battle/goblin`)
+      .withJson(character)
+      .expectStatus(200)
+      // Use expectJsonLike for partial validation (works in TS)
+      .expectJsonLike({
+        winner: /.*/,         // matches any string
+        rounds: /.*/,         // matches any number
+        finalMessage: /.*/,   // matches any string
+        battleLog: /.*/       // matches any array
+      });
+  });
+
 });
